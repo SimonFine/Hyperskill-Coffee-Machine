@@ -1,0 +1,104 @@
+package com.paczka;
+
+import java.util.Scanner;
+
+public class Hyperskill {
+    public static void makeCoffee(int[] supplies, int[] needed) {
+        boolean showMessage = true;
+        for (int i = 0; i < supplies.length; i++) {
+            supplies[i] -= needed[i];
+            if (supplies[i] < 0) {
+                switch (i) {
+                    case 0:
+                        System.out.println("Sorry, not enough water!");
+                        break;
+                    case 1:
+                        System.out.println("Sorry, not enough milk!");
+                        break;
+                    case 2:
+                        System.out.println("Sorry, not enough coffee beans!");
+                        break;
+                    case 3:
+                        System.out.println("Sorry, not enough cups!");
+                        break;
+                }
+                showMessage = false;
+                for (int j = 0; j < supplies.length; j++) {
+                    supplies[j] += needed[j]; //undo subtraction from supplies
+                }
+            }
+        }
+        if (showMessage) {
+            System.out.println("I have enough resources, making you a coffee!");
+        }
+    }
+
+    public static void buy(String choice, int[] supplies) {
+        switch (choice) {
+            case "1":
+                makeCoffee(supplies, new int[]{250, 0, 16, 1, -4});
+                break;
+            case "2":
+                makeCoffee(supplies, new int[]{350, 75, 20, 1, -7});
+                break;
+            case "3":
+                makeCoffee(supplies, new int[]{200, 100, 12, 1, -6});
+                break;
+            case "back":
+                break;
+            default:
+                System.out.println("wrong option");
+        }
+    }
+
+    public static void fill(int[] supplies, Scanner scanner) {
+        System.out.println("Write how many ml of water do you want to add:");
+        supplies[0] += scanner.nextInt();
+        System.out.println("Write how many ml of milk do you want to add:");
+        supplies[1] += scanner.nextInt();
+        System.out.println("Write how may grams of coffee beans do you want to add:");
+        supplies[2] += scanner.nextInt();
+        System.out.println("Write how many disposable cups of coffee do you want to add:");
+        supplies[3] += scanner.nextInt();
+    }
+
+    public static void take(int[] supplies) {
+        System.out.println("I gave you " + supplies[4] + "$");
+        supplies[4] = 0;
+    }
+
+    public static void showStatus(int[] supplies) {
+        System.out.println("The coffe machine has:\n" +
+                supplies[0] + " of water\n" +
+                supplies[1] + " of milk\n" +
+                supplies[2] + " of coffee beans\n" +
+                supplies[3] + " of disposable cups\n" +
+                supplies[4] + " of money");
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int[] supplies = {400, 540, 120, 9, 550};
+
+        String input;
+        do {
+            System.out.println("Write action (buy, fill, take, remaining, exit):");
+            input = scanner.next();
+            switch (input) {
+                case "buy":
+                    System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:");
+                    buy(scanner.next(), supplies);
+                    break;
+                case "fill":
+                    fill(supplies, scanner);
+                    break;
+                case "take":
+                    take(supplies);
+                    break;
+                case "remaining":
+                    showStatus(supplies);
+                    break;
+            }
+        } while (!input.equals("exit"));
+    }
+}
